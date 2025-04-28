@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Admin Panel</h1>
+    <p>You are an administrator.</p>
+
+    <form action="/upgrade" method="GET">
+      <label for="username">Upgrade user to admin:</label>
+      <input type="text" name="username" placeholder="Username (e.g., peter)" required />
+      <button type="submit">Upgrade</button>
+    </form>
+
+    <h2>Users List:</h2>
+    <ul id="users-list"></ul>
+
+    <a href="/logout">Logout</a>
+  </div>
+
+  <script>
+    async function fetchUsers() {
+      try {
+        const res = await fetch('/users');
+        if (res.ok) {
+          const users = await res.json();
+          const usersList = document.getElementById('users-list');
+          usersList.innerHTML = '';
+          users.forEach(user => {
+            const li = document.createElement('li');
+            li.textContent = `${user.username} - ${user.role}`;
+            usersList.appendChild(li);
+          });
+        } else {
+          console.error('Failed to fetch users');
+        }
+      } catch (err) {
+        console.error('Error:', err);
+      }
+    }
+
+    fetchUsers();
+  </script>
+</body>
+</html>
